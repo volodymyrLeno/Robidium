@@ -1,0 +1,15 @@
+{
+	"segmented": false,
+	"algorithm": "CloFast",
+	"minSupport": 0.1,
+	"minCoverage": 0.05,
+	"metric": "frequency",
+    "context": [
+        "targetApp",
+        "url",
+		"target.sheetName",
+		"target.id",
+		"target.name",
+		"target.innerText"
+    ]
+}

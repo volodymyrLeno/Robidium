@@ -94,12 +94,6 @@ public final class logReader {
                     values[1] = trace.get(j).getAttributes().get(conceptname).toString();
                     attributes.add("eventType");
                     values[2] = trace.get(j).getAttributes().get(timestamp).toString();
-                    if(values[2].contains("2019-02-19T04:36:04"))
-                        System.out.println();
-                    values[2] = values[2].substring(0, values[2].indexOf('+'));
-                    if(values[2].length() == 19)
-                        values[2] = values[2] + ".000";
-                    values[2] = values[2] + "Z";
                     attributes.add("timeStamp");
 
                     int k = 3;

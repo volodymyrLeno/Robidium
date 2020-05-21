@@ -150,6 +150,19 @@ public class Utils {
         return groupedEvents;
     }
 
+    public static HashMap<Integer, List<Event>> extractCases(List<Event> events){
+        HashMap<Integer, List<Event>> cases = new HashMap<>();
+        for(var event: events){
+            var caseID = Integer.valueOf(event.getCaseID());
+            if(!cases.containsKey(caseID))
+                cases.put(caseID, Collections.singletonList(event));
+            else
+                cases.put(caseID, Stream.concat(cases.get(caseID).stream(),
+                        Stream.of(event)).collect(Collectors.toList()));
+        }
+        return cases;
+    }
+
     public static void setContextAttributes(List<Event> events, List<String> contextAttributes){
         for(var event: events){
             HashMap<String, String> context = new HashMap<>();
@@ -285,7 +298,7 @@ public class Utils {
         try {
             Object obj = parser.parse(new FileReader(filePath));
             JSONObject jsonObject = (JSONObject) obj;
-            JSONArray context = (JSONArray) jsonObject.get("Context");
+            JSONArray context = (JSONArray) jsonObject.get("context");
 
             if (context != null) {
                 for (int i = 0; i < context.size(); i++){
@@ -297,4 +310,6 @@ public class Utils {
         }
         return contextAttributes;
     }
+
+
 }
