@@ -1,0 +1,10 @@
+{
+    "Context": [
+        "targetApp",
+        "url",
+		"target.sheetName",
+		"target.id",
+		"target.name",
+		"target.innerText"
+    ]
+}
