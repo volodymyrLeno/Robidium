@@ -20,10 +20,10 @@ import static java.util.Comparator.comparing;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
 
-public class patternsMiner {
+public class PatternsMiner {
     private static List<Pattern> patterns = new ArrayList<>();
 
-    public static List<Pattern> discoverPatterns2(HashMap<Integer, List<Event>> cases, String config){
+    public static List<Pattern> discoverPatterns(HashMap<Integer, List<Event>> cases, SPMFAlgorithmName algorithm, Double minSupport, Double minCoverage, String metric){
         List<String> supportedMetrics = new ArrayList<>(){{
             add("frequency");
             add("coverage");
@@ -31,24 +31,6 @@ public class patternsMiner {
             add("cohesion");
         }};
 
-        double support = 0.0;
-        double minCoverage = 0.0;
-        SPMFAlgorithmName algorithm = null;
-        String metric = null;
-
-        JSONParser parser = new JSONParser();
-        try {
-            Object obj = parser.parse(new FileReader(config));
-            JSONObject jsonObject = (JSONObject) obj;
-
-            algorithm = SPMFAlgorithmName.valueOf(jsonObject.get("algorithm").toString());
-            support = (Double) jsonObject.get("minSupport");
-            minCoverage = (Double) jsonObject.get("minCoverage");
-            metric = jsonObject.get("metric").toString();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
 
         if(algorithm == null){
             System.out.println("The selected algorithm is not supported!");
@@ -59,14 +41,14 @@ public class patternsMiner {
             return null;
         }
         else{
-            int minFrequency = (int)Math.round(cases.size() * support);
+            int minFrequency = (int)Math.round(cases.size() * minSupport);
 
             List<Event> events = new ArrayList<>();
             cases.values().forEach(events::addAll);
 
             System.out.println("\nDiscovering frequent patterns...\n");
             long s1 = System.currentTimeMillis();
-            getPattern(toSequences(cases), algorithm, support, minFrequency, cases, metric);
+            getPattern(toSequences(cases), algorithm, minSupport, minFrequency, cases, metric);
             long s2 = System.currentTimeMillis();
             System.out.println("\nDiscovery time - " + (s2 - s1) / 1000.0 + " sec");
 
@@ -76,8 +58,7 @@ public class patternsMiner {
                 pattern.setRelativeSupport((double) pattern.getAbsoluteSupport()/cases.size());
             }
 
-            final double minCov = minCoverage;
-            patterns = new ArrayList<>(patterns.stream().filter(pattern -> pattern.getCoverage() >= minCov).collect(Collectors.toList()));
+            patterns = new ArrayList<>(patterns.stream().filter(pattern -> pattern.getCoverage() >= minCoverage).collect(Collectors.toList()));
 
             return rankByCoverage(patterns);
         }
@@ -125,14 +106,6 @@ public class patternsMiner {
                     break;
                 }
             }
-
-            /*
-            List<String> events = new ArrayList<>();
-            temp.forEach(events::addAll);
-
-            List<Pattern> ptrns = rankByCoverage(extractPatterns(parseSequences("output.txt")).stream().filter(pattern ->
-                    pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList()), events);
-                    */
 
             if(ptrns.size() > 0){
                 patterns.add(ptrns.get(0));

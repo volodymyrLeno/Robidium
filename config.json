@@ -3,7 +3,7 @@
 	"algorithm": "CloFast",
 	"minSupport": 0.1,
 	"minCoverage": 0.05,
-	"metric": "frequency",
+	"metric": "cohesion",
     "context": [
         "targetApp",
         "url",

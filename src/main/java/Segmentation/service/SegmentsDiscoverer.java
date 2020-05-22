@@ -6,7 +6,8 @@ import Segmentation.data.Node;
 import data.Event;
 import ee.ut.comptech.DominatorTree;
 import utils.Utils;
-import utils.logReader;
+import utils.LogReader;
+import utils.LogWriter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
 import static java.util.Comparator.comparing;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.toMap;
+import static utils.Parser.*;
 
 public class SegmentsDiscoverer {
 
@@ -52,19 +54,29 @@ public class SegmentsDiscoverer {
     }
 
     public void segmentLog(String log, String config){
-        List<Event> events = logReader.readCSV(log);
-        List<String> contextAttributes = Utils.extractContextAttributes(config);
+        List<Event> events = LogReader.readCSV(log);
+        List<String> contextAttributes = extractContextAttributes(config);
         var groupedEvents = Utils.groupEvents(events);
         for(var key: groupedEvents.keySet())
-            Utils.setContextAttributes(groupedEvents.get(key), contextAttributes);
+            setContextAttributes(groupedEvents.get(key), contextAttributes);
         var dfg = new DirectlyFollowsGraph(events);
         dfg.buildGraph();
 
         var cases = extractSegmentsFromDFG(dfg);
-        Utils.writeSegments(log.substring(0, log.lastIndexOf(".")) + "_segmented.csv", cases);
+        LogWriter.writeSegments(log.substring(0, log.lastIndexOf(".")) + "_segmented.csv", cases);
     }
 
     public HashMap<Integer, List<Event>> extractSegmentsFromDFG(DirectlyFollowsGraph dfg){
+        generateDominatorsTree(dfg);
+        List<Edge> loops = new ArrayList<>();
+        HashMap<Edge, List<Node>> container = new HashMap<>();
+        discoverBackEdges(dfg, loops, container, 0);
+        return discoverSegments(dfg, loops, container);
+    }
+
+    public HashMap<Integer, List<Event>> extractSegments(List<Event> events){
+        DirectlyFollowsGraph dfg = new DirectlyFollowsGraph(events);
+        dfg.buildGraph();
         generateDominatorsTree(dfg);
         List<Edge> loops = new ArrayList<>();
         HashMap<Edge, List<Node>> container = new HashMap<>();

@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public final class logReader {
+public final class LogReader {
 
     public static List<Event> readCSV(String path){
         int eid = 0;
