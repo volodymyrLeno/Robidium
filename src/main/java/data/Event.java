@@ -108,6 +108,21 @@ public class Event {
 
     public int getID() { return eid; }
 
+    public HashMap<String, String> getContext(){ return this.context; }
+
+    public HashMap<String, String> getPayload(){ return this.payload; }
+
+    public String getEventNameAndContext() {
+        String output = this.eventType;
+        if (getContext().size() > 0) {
+            for(String attr: this.context.keySet())
+                output += "+" + this.context.get(attr);
+        } else {
+            output += "+";
+        }
+        return output;
+    }
+
     public boolean isStart() { return start; }
 
     public void setStart(boolean start) { this.start = start; }

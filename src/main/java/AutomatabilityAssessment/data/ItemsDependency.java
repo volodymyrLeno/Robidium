@@ -1,5 +1,6 @@
-package RoutineIdentification.data;
+package AutomatabilityAssessment.data;
 
+import RoutineIdentification.data.PatternItem;
 import lombok.Data;
 
 import java.util.List;
