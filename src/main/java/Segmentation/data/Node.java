@@ -54,10 +54,10 @@ public class Node {
 
         for(var attribute: this.context.keySet()){
             if(!ignoreAttributes.contains(attribute))
-                context += this.context.get(attribute) + "_";
+                context += this.context.get(attribute) + "+";
         }
         if(!context.equals(""))
-            return eventType + "_" + context.substring(0, context.lastIndexOf("_")).replaceAll("[^a-zA-Z0-9]+", "_");
+            return eventType + "+" + context.substring(0, context.lastIndexOf("+")).replaceAll("[^a-zA-Z0-9+]+", "_");
         else
             return eventType;
     }

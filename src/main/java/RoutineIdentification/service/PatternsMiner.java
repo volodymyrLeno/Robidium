@@ -4,9 +4,6 @@ import RoutineIdentification.data.Pattern;
 import RoutineIdentification.data.PatternItem;
 import Segmentation.data.Node;
 import data.Event;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -179,14 +176,16 @@ public class PatternsMiner {
         for(var sequence: sequences){
             List<String> elements = Arrays.asList(sequence.split(","));
             Integer absSupport = Integer.valueOf(elements.get(elements.size() - 1).replace("#SUP: ",""));
+            int index = 0;
             List<PatternItem> patternItems = new ArrayList<>();
-            for(var element: elements.subList(0, elements.size() - 1))
-                patternItems.add(new PatternItem(element));
+            for(var element: elements.subList(0, elements.size() - 1)){
+                patternItems.add(new PatternItem(index, element));
+                index++;
+            }
             patterns.add(new Pattern(patternItems, absSupport));
         }
         return patterns;
     }
-
 
     private static void runSFPM(SPMFAlgorithmName algorithm, Double minSupp){
         Process p;
