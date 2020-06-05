@@ -21,6 +21,8 @@ public class PatternsMiner {
     private static List<Pattern> patterns = new ArrayList<>();
 
     public static List<Pattern> discoverPatterns(HashMap<Integer, List<Event>> cases, SPMFAlgorithmName algorithm, Double minSupport, Double minCoverage, String metric){
+        patterns.clear();
+
         List<String> supportedMetrics = new ArrayList<>(){{
             add("frequency");
             add("coverage");

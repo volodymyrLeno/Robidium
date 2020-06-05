@@ -23,25 +23,28 @@ public class Main {
         String log = "StudentRecord.csv";
         String config = "config.json";
 
-        readConfiguration(config);
-        var events = LogReader.readCSV(log);
-        var groupedEvents = Utils.groupEvents(events);
+        for(int i = 0; i < 3; i++){
+            readConfiguration(config);
+            var events = LogReader.readCSV(log);
+            var groupedEvents = Utils.groupEvents(events);
 
-        for(var key: groupedEvents.keySet())
-            Parser.setContextAttributes(groupedEvents.get(key), contextAttributes);
+            for(var key: groupedEvents.keySet())
+                Parser.setContextAttributes(groupedEvents.get(key), contextAttributes);
 
-        HashMap<Integer, List<Event>> cases;
+            HashMap<Integer, List<Event>> cases;
 
-        if(!segmented){
-            SegmentsDiscoverer disco = new SegmentsDiscoverer();
-            cases = disco.extractSegments(events);
+            if(!segmented){
+                SegmentsDiscoverer disco = new SegmentsDiscoverer();
+                cases = disco.extractSegments(events);
+            }
+            else{
+                cases = Utils.extractCases(events);
+            }
+
+            var patterns = PatternsMiner.discoverPatterns(cases, algorithm, minSupport, minCoverage, metric);
+            System.out.println();
         }
-        else{
-            cases = Utils.extractCases(events);
-        }
 
-        var patterns = PatternsMiner.discoverPatterns(cases, algorithm, minSupport, minCoverage, metric);
-        System.out.println();
     }
 
     static void readConfiguration(String config){

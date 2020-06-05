@@ -57,7 +57,7 @@ public class Node {
                 context += this.context.get(attribute) + "+";
         }
         if(!context.equals(""))
-            return eventType + "+" + context.substring(0, context.lastIndexOf("+")).replaceAll("[^a-zA-Z0-9+]+", "_");
+            return eventType + "+" + context.substring(0, context.lastIndexOf("+"));//.replaceAll("[^a-zA-Z0-9+]+", "_");
         else
             return eventType;
     }

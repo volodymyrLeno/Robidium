@@ -1,13 +1,13 @@
 @CONVERTED_FROM_TEXT
-@ITEM=9=editField+Chrome+Address_Region+https_forms_zoho_com_universityofmelbourne_form_NewRecord
-@ITEM=8=paste+Chrome+Address_Region+https_forms_zoho_com_universityofmelbourne_form_NewRecord
-@ITEM=7=editField+Chrome+SingleLine+https_forms_zoho_com_universityofmelbourne_form_NewRecord
+@ITEM=9=editField+Chrome+Address_Region+https://forms.zoho.com/universityofmelbourne/form/NewRecord
+@ITEM=8=paste+Chrome+Address_Region+https://forms.zoho.com/universityofmelbourne/form/NewRecord
+@ITEM=7=editField+Chrome+SingleLine+https://forms.zoho.com/universityofmelbourne/form/NewRecord
 @ITEM=6=copyCell+Excel+Sheet1+F
-@ITEM=5=paste+Chrome+SingleLine1+https_forms_zoho_com_universityofmelbourne_form_NewRecord
+@ITEM=5=paste+Chrome+SingleLine1+https://forms.zoho.com/universityofmelbourne/form/NewRecord
 @ITEM=4=copyCell+Excel+Sheet1+G
-@ITEM=3=editField+Chrome+DecisionBox+https_forms_zoho_com_universityofmelbourne_form_NewRecord
-@ITEM=2=clickCheckbox+Chrome+DecisionBox+https_forms_zoho_com_universityofmelbourne_form_NewRecord
-@ITEM=1=clickLink+Chrome+https_forms_zoho_com_universityofmelbourne_form_NewRecord_thankyou+Add_another_response_
+@ITEM=3=editField+Chrome+DecisionBox+https://forms.zoho.com/universityofmelbourne/form/NewRecord
+@ITEM=2=clickCheckbox+Chrome+DecisionBox+https://forms.zoho.com/universityofmelbourne/form/NewRecord
+@ITEM=1=clickLink+Chrome+https://forms.zoho.com/universityofmelbourne/form/NewRecord/thankyou+Add another response.
  -1 -2
  -1 -2
 1 -1 -2
