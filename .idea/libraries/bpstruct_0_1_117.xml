@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="bpstruct-0.1.117">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../RPM_Segmentator/src/bpstruct-0.1.117.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/bpstruct-0.1.117.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
