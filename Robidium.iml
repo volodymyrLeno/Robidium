@@ -106,15 +106,6 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-cache:2.3.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.2.6.RELEASE" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: com.spmf:spmf:1.0">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/main/resources/repo/spmf.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="Maven: com.bpstruct:bpstruct:1.0">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/src/main/resources/repo/bpstruct-0.1.117.jar!/" />

@@ -33,7 +33,7 @@ public class ScriptController {
     public ResponseEntity<Resource> generateScript(@RequestParam String patternId) throws IOException {
         Pattern pattern = patternService.getById(patternId);
         scriptService.generateScript(pattern);
-        File file = new File("scripts/script_test.xaml");
+        File file = new File(String.format("scripts/script_%s.xaml", patternId));
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 

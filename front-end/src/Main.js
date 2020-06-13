@@ -1,15 +1,14 @@
 import React from 'react'
-import LogUpload from './Log/upload/LogUpload'
+import LogPanel from './Log/LogPanel'
 import RoutinePanel from './Routine/RoutinePanel'
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-
+import Paper from '@material-ui/core/Paper';
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
   content: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6, 0, 4),
+    padding: theme.spacing(5, 0),
   },
 });
 
@@ -33,7 +32,7 @@ class Main extends React.Component {
           <Grid container spacing={5} direction={ 'column' }>
             <Grid item xs>
             <Container maxWidth="lg">
-              <LogUpload setRoutines={this.handleRoutines}/>
+              <LogPanel onRoutinesReceived={this.handleRoutines}/>
             </Container>
             </Grid>
             <Grid item xs>

@@ -66,14 +66,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.spmf</groupId>
-            <artifactId>spmf</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/repo/spmf.jar</systemPath>
-        </dependency>
-
-        <dependency>
             <groupId>com.bpstruct</groupId>
             <artifactId>bpstruct</artifactId>
             <version>1.0</version>
