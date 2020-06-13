@@ -23,6 +23,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class ScriptBuilder {
@@ -61,7 +63,7 @@ public class ScriptBuilder {
         return doc;
     }
 
-    public static void writeScript() {
+    public static void writeScript(String patternId) {
         try {
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
@@ -70,7 +72,8 @@ public class ScriptBuilder {
             StringWriter writer = new StringWriter();
             transformer.transform(new DOMSource(doc), new StreamResult(writer));
             String output = writer.getBuffer().toString();
-            BufferedWriter w = new BufferedWriter(new FileWriter("scripts/script_test.xaml"));
+            Files.createDirectories(Paths.get("scripts"));
+            BufferedWriter w = new BufferedWriter(new FileWriter(String.format("scripts/script_%s.xaml", patternId)));
             w.write(StringEscapeUtils.unescapeXml(output));
             w.close();
             System.out.println("File saved!");

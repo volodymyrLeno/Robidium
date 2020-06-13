@@ -19,7 +19,7 @@ public class ImperativeCompiler {
     private static boolean newExcelScope = true;
     private static boolean newChromeScope = true;
 
-    static void compile() {
+    static void compile(String patternId) {
         List<Action> actions = Utils.readLog();
         TransformationService.getInstance().readTransformationsFromJSON(TRANSFORMATIONS_FILE);
         DependencyService.getInstance().parse(DEPENDENCIES_FILE);
@@ -27,7 +27,7 @@ public class ImperativeCompiler {
         scriptBuilder = new ScriptBuilder();
         scriptBuilder.createDoSequence();
         parseActions(actions);
-        ScriptBuilder.writeScript();
+        ScriptBuilder.writeScript(patternId);
 
         previousAction = null;
         newExcelScope = true;

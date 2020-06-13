@@ -19,6 +19,6 @@ public class UIPathScriptService implements ScriptService {
         Path transformationMapPath = PatternSerializer.writeTransformationMap(pattern);
 
          Compiler.compile(Arrays.asList(instancePath, dataTransformationsPath,
-                functionalDependenciesPath, transformationMapPath));
+                functionalDependenciesPath, transformationMapPath), pattern.getId().toString());
     }
 }
