@@ -19,11 +19,9 @@ import java.util.stream.Stream;
 public class TaneExecutor {
     private static String tanePath = "tane-1.0";
     private List<List<String>> instances;
-    private Map<Integer, List<Event>> cases;
     private Pattern pattern;
 
-    public TaneExecutor(Map<Integer, List<Event>> cases, Pattern pattern) {
-        this.cases = cases;
+    public TaneExecutor(Pattern pattern) {
         this.pattern = pattern;
     }
 
@@ -36,7 +34,7 @@ public class TaneExecutor {
     }
 
     public void createInstancesFile() {
-        this.instances = InstanceParser.getInstances(cases, pattern);
+        this.instances = InstanceParser.getInstances(pattern);
         File file = new File(tanePath + "/original/data.orig");
 
         try {

@@ -12,6 +12,6 @@ public interface PatternRepository {
 
     Pattern getById(String id);
 
-    List<Pattern> findAll(Map<Integer, List<Event>> cases, PatternsMiner.SPMFAlgorithmName algorithm,
+    List<Pattern> findAll(PatternsMiner.SPMFAlgorithmName algorithm,
                           Double minSupport, Double minCoverage, String metric);
 }

@@ -3,8 +3,8 @@ package com.robidium.demo.main.AutomatabilityAssessment.service.Foofah;
 import com.robidium.demo.main.AutomatabilityAssessment.data.Transformation;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.RoutineIdentification.data.PatternItem;
-import com.robidium.demo.main.data.Event;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,10 +17,16 @@ import java.util.stream.Stream;
 @Service
 public class FoofahService {
 
-    public Map<Pair<PatternItem, PatternItem>, String> findTransformations(Map<Integer, List<Event>> cases, Pattern pattern) {
+    private final TransformationsExtractor extractor;
+
+    @Autowired
+    public FoofahService(TransformationsExtractor extractor) {
+        this.extractor = extractor;
+    }
+
+    public Map<Pair<PatternItem, PatternItem>, String> findTransformations(Pattern pattern) {
         Map<Pair<PatternItem, PatternItem>, String> patternTransformations = new HashMap<>();
-        TransformationsExtractor extractor = new TransformationsExtractor();
-        Map<Pair<PatternItem, PatternItem>, List<Transformation>> transformationsPerReadWrite = extractor.getPatternTransformations(cases, pattern);
+        Map<Pair<PatternItem, PatternItem>, List<Transformation>> transformationsPerReadWrite = extractor.getPatternTransformations(pattern);
 
         transformationsPerReadWrite.forEach((readWritePair, transformations) -> {
             Map<String, List<Transformation>> cluster = Tokenizer.clusterByPattern(transformations);

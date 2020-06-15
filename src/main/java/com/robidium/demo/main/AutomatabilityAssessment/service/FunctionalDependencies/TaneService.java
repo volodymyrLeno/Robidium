@@ -15,8 +15,8 @@ import java.util.Map;
 public class TaneService {
     private List<List<String>> instances;
 
-    public List<TaneDependency> getFunctionalDependencies(Map<Integer, List<Event>> cases, Pattern pattern) {
-        TaneExecutor taneExecutor = new TaneExecutor(cases, pattern);
+    public List<TaneDependency> getFunctionalDependencies(Pattern pattern) {
+        TaneExecutor taneExecutor = new TaneExecutor(pattern);
         taneExecutor.createInstancesFile();
         taneExecutor.createTaneDataFiles();
         this.instances = taneExecutor.getInstances();

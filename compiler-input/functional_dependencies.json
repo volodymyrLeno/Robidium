@@ -1,0 +1,82 @@
+[ {
+  "depender_idx" : "20",
+  "values" : [ {
+    "depender_value" : "on"
+  } ]
+}, {
+  "dependee_idx" : [ "17" ],
+  "depender_idx" : "18",
+  "values" : [ {
+    "dependee_values" : [ "United Kingdom" ],
+    "depender_value" : "+44"
+  }, {
+    "dependee_values" : [ "Italy" ],
+    "depender_value" : "+39"
+  }, {
+    "dependee_values" : [ "China" ],
+    "depender_value" : "+86"
+  }, {
+    "dependee_values" : [ "Spain" ],
+    "depender_value" : "+34"
+  }, {
+    "dependee_values" : [ "Canada" ],
+    "depender_value" : "+11"
+  }, {
+    "dependee_values" : [ "Netherlands" ],
+    "depender_value" : "+31"
+  }, {
+    "dependee_values" : [ "South Korea" ],
+    "depender_value" : "+82"
+  }, {
+    "dependee_values" : [ "Hungary" ],
+    "depender_value" : "+36"
+  }, {
+    "dependee_values" : [ "United States" ],
+    "depender_value" : "+12"
+  }, {
+    "dependee_values" : [ "Sweden" ],
+    "depender_value" : "+46"
+  }, {
+    "dependee_values" : [ "France" ],
+    "depender_value" : "+33"
+  }, {
+    "dependee_values" : [ "Ukraine" ],
+    "depender_value" : "+380"
+  }, {
+    "dependee_values" : [ "Norway" ],
+    "depender_value" : "+47"
+  }, {
+    "dependee_values" : [ "Czech Republic" ],
+    "depender_value" : "+420"
+  }, {
+    "dependee_values" : [ "Portugal" ],
+    "depender_value" : "+351"
+  }, {
+    "dependee_values" : [ "Croatia" ],
+    "depender_value" : "+385"
+  }, {
+    "dependee_values" : [ "Finland" ],
+    "depender_value" : "+358"
+  }, {
+    "dependee_values" : [ "New Zealand" ],
+    "depender_value" : "+64"
+  }, {
+    "dependee_values" : [ "Japan" ],
+    "depender_value" : "+81"
+  }, {
+    "dependee_values" : [ "Russia" ],
+    "depender_value" : "+7"
+  }, {
+    "dependee_values" : [ "Germany" ],
+    "depender_value" : "+49"
+  }, {
+    "dependee_values" : [ "Ireland" ],
+    "depender_value" : "+353"
+  }, {
+    "dependee_values" : [ "Kazakhstan" ],
+    "depender_value" : "+7"
+  }, {
+    "dependee_values" : [ "Poland" ],
+    "depender_value" : "+48"
+  } ]
+} ]

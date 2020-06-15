@@ -1,5 +1,6 @@
 package com.robidium.demo.main.AutomatabilityAssessment.service.Foofah;
 
+import com.robidium.demo.cases.CaseService;
 import com.robidium.demo.main.AutomatabilityAssessment.data.Transformation;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.RoutineIdentification.data.PatternItem;
@@ -7,25 +8,32 @@ import com.robidium.demo.main.Segmentation.data.Node;
 import com.robidium.demo.main.data.Event;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public class TransformationsExtractor {
+    private final CaseService caseService;
+
     private List<String> readActions;
     private List<String> writeActions;
 
-    public TransformationsExtractor() {
+    @Autowired
+    public TransformationsExtractor(CaseService caseService) {
+        this.caseService = caseService;
         writeActions = new ArrayList<>(Arrays.asList("editField", "editCell"));
         readActions = new ArrayList<>(Arrays.asList("copyCell", "copy"));
     }
 
-    public Map<Pair<PatternItem, PatternItem>, List<Transformation>> getPatternTransformations(Map<Integer, List<Event>> cases, Pattern pattern) {
+    public Map<Pair<PatternItem, PatternItem>, List<Transformation>> getPatternTransformations(Pattern pattern) {
         PatternEventsFlowExtractor extractor = new PatternEventsFlowExtractor();
         Map<PatternItem, List<PatternItem>> writesPerReadEvents = extractor.extractWriteEventsPerReadEvent(pattern);
         Map<Pair<PatternItem, PatternItem>, List<Transformation>> transformationsPerReadWrite = new LinkedHashMap<>();
-        List<Transformation> examples = extractAllTransformations(cases);
+        List<Transformation> examples = extractAllTransformations(caseService.getCases());
 
         writesPerReadEvents.forEach((key, value) -> value.forEach(writeEvent -> {
             if (key != null) {

@@ -23,9 +23,9 @@ public class SimplePatternRepository implements PatternRepository {
     }
 
     @Override
-    public List<Pattern> findAll(Map<Integer, List<Event>> cases, PatternsMiner.SPMFAlgorithmName algorithm,
+    public List<Pattern> findAll(PatternsMiner.SPMFAlgorithmName algorithm,
                                  Double minSupport, Double minCoverage, String metric) {
-        patterns = PatternsMiner.discoverPatterns(cases, algorithm, minSupport, minCoverage, metric);
+        patterns = PatternsMiner.discoverPatterns(algorithm, minSupport, minCoverage, metric);
         return patterns;
     }
 }

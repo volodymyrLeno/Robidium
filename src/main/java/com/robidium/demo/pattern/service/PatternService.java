@@ -23,8 +23,8 @@ public class PatternService {
         return patternRepository.getById(id);
     }
 
-    public List<Pattern> extractAll(Map<Integer, List<Event>> cases, PatternsMiner.SPMFAlgorithmName algorithm,
+    public List<Pattern> extractAll(PatternsMiner.SPMFAlgorithmName algorithm,
                                     Double minSupport, Double minCoverage, String metric) {
-        return patternRepository.findAll(cases, algorithm, minSupport, minCoverage, metric);
+        return patternRepository.findAll(algorithm, minSupport, minCoverage, metric);
     }
 }

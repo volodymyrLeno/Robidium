@@ -3,6 +3,7 @@ package com.robidium.demo.cases;
 import com.robidium.demo.main.AutomatabilityAssessment.data.Sequence;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.Segmentation.data.Node;
+import com.robidium.demo.main.Segmentation.service.SegmentsDiscoverer;
 import com.robidium.demo.main.data.Event;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,18 @@ public class CaseService {
 
     private Map<Integer, List<Event>> cases;
 
-    public Map<Integer, List<Event>> extractCases(List<Event> events) {
-        cases = new HashMap<>();
+    public void extractCases(List<Event> events, boolean isSegmented) {
+        if (isSegmented) {
+            cases = extractSegmentedCases(events);
+        } else {
+            SegmentsDiscoverer disco = new SegmentsDiscoverer();
+            cases = disco.extractSegments(events);
+        }
+    }
+
+    private Map<Integer, List<Event>> extractSegmentedCases(List<Event> events) {
+        Map<Integer, List<Event>> cases = new HashMap<>();
+
         for (Event event : events) {
             int caseId = Integer.parseInt(event.getCaseID());
             if (!cases.containsKey(caseId))

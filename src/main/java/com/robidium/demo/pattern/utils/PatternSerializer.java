@@ -5,21 +5,23 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.opencsv.CSVWriter;
 import com.robidium.demo.cases.CaseService;
+import com.robidium.demo.log.StorageProperties;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.RoutineIdentification.data.PatternItem;
-import com.robidium.demo.main.Segmentation.data.Node;
 import com.robidium.demo.main.data.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -28,21 +30,20 @@ public class PatternSerializer {
             "target.workbookName", "target.sheetName", "target.id", "target.class", "target.tagName",
             "target.type", "target.name", "target.value", "target.innerText", "target.checked", "target.href",
             "target.option", "target.title", "target.innerHTML"};
-
+    private static Path rootLocation;
     private static CaseService caseService;
 
     @Autowired
-    public PatternSerializer(CaseService caseService) {
+    public PatternSerializer(StorageProperties properties, CaseService caseService) {
+        PatternSerializer.rootLocation = Paths.get(properties.getPatternInfoLocation());
         PatternSerializer.caseService = caseService;
     }
 
     public static Path writeInstance(Pattern pattern) {
         List<Event> firstContainingCase = caseService.getFirstContainingCase(pattern);
 
-        File file = null;
+        File file = new File(rootLocation + "/pattern.csv");
         try {
-            file = File.createTempFile("pattern", ".csv");
-            file.deleteOnExit();
             CSVWriter csvWriter = new CSVWriter(new FileWriter(file));
 
             csvWriter.writeNext(columns);
@@ -76,7 +77,7 @@ public class PatternSerializer {
             e.printStackTrace();
         }
 
-        return file != null ? file.toPath() : null;
+        return file.toPath();
     }
 
     public static Path writeDataTransformations(Pattern pattern) {
@@ -104,10 +105,8 @@ public class PatternSerializer {
             }
         });
 
-        File file = null;
+        File file = new File(rootLocation + "/transformations.json");
         try {
-            file = File.createTempFile("transformations", ".json");
-            file.deleteOnExit();
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(ts.toPrettyString());
 
@@ -117,7 +116,7 @@ public class PatternSerializer {
             e.printStackTrace();
         }
 
-        return file != null ? file.toPath() : null;
+        return file.toPath();
     }
 
     public static Path writeFunctionalDependencies(Pattern pattern) {
@@ -162,10 +161,8 @@ public class PatternSerializer {
             dependenciesArray.add(dependencyNode);
         });
 
-        File file = null;
+        File file = new File(rootLocation + "/functional_dependencies.json");
         try {
-            file = File.createTempFile("functional_dependencies", ".json");
-            file.deleteOnExit();
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(dependenciesArray.toPrettyString());
 
@@ -175,7 +172,7 @@ public class PatternSerializer {
             e.printStackTrace();
         }
 
-        return file != null ? file.toPath() : null;
+        return file.toPath();
     }
 
     public static Path writeTransformationMap(Pattern pattern) {
@@ -198,10 +195,8 @@ public class PatternSerializer {
             root.add(transformation);
         });
 
-        File file = null;
+        File file = new File(rootLocation + "/transformation_map.json");
         try {
-            file = File.createTempFile("transformation_map", ".json");
-            file.deleteOnExit();
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(root.toPrettyString());
 
@@ -211,15 +206,15 @@ public class PatternSerializer {
             e.printStackTrace();
         }
 
-        return file != null ? file.toPath() : null;
+        return file.toPath();
     }
 
-    private static List<List<String>> casesToSequences(Map<Integer, List<Event>> cases) {
-        return cases.keySet().stream()
-                .map(key -> cases.get(key).stream()
-                        .map(el -> new Node(el).toString())
-                        .collect(Collectors.toList()))
-                .map(ArrayList::new)
-                .collect(Collectors.toList());
+    @PostConstruct
+    public void init() {
+        try {
+            Files.createDirectories(rootLocation);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize pattern info storage", e);
+        }
     }
 }

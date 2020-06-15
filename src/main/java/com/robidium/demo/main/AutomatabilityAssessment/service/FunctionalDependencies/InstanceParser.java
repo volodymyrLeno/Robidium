@@ -1,15 +1,18 @@
 package com.robidium.demo.main.AutomatabilityAssessment.service.FunctionalDependencies;
 
+import com.robidium.demo.cases.CaseService;
 import com.robidium.demo.main.AutomatabilityAssessment.data.Sequence;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.RoutineIdentification.data.PatternItem;
 import com.robidium.demo.main.Segmentation.data.Node;
 import com.robidium.demo.main.data.Event;
-import org.yaml.snakeyaml.events.NodeEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class InstanceParser {
 
     // Event attributes for instances
@@ -17,11 +20,15 @@ public class InstanceParser {
 
     private static List<List<String>> instances;
 
-    private static Map<Integer, List<Event>> cases;
     private static Pattern pattern;
+    private static CaseService caseService;
 
-    public static List<List<String>> getInstances(Map<Integer, List<Event>> cases, Pattern pattern) {
-        InstanceParser.cases = cases;
+    @Autowired
+    public InstanceParser(CaseService caseService) {
+        InstanceParser.caseService = caseService;
+    }
+
+    public static List<List<String>> getInstances(Pattern pattern) {
         InstanceParser.pattern = pattern;
 
         // Fill instances with empty lists
@@ -35,7 +42,7 @@ public class InstanceParser {
 
     private static void initInstances() {
         instances = new ArrayList<>();
-        cases.entrySet().stream()
+        caseService.getCases().entrySet().stream()
                 .filter(entry -> {
                     Sequence s = getSequence(entry.getValue());
                     return s.contains(pattern);
@@ -46,7 +53,7 @@ public class InstanceParser {
     private static void extractData(Map<String, Integer> patternItemsCounts, PatternItem patternItem) {
         countPatternItems(patternItemsCounts, patternItem.getValue());
         int sequenceIndex = -1;
-        for (List<Event> caseEvents : cases.values()) {
+        for (List<Event> caseEvents : caseService.getCases().values()) {
             Sequence sequence = getSequence(caseEvents);
             if (sequence.contains(pattern)) {
                 sequenceIndex++;

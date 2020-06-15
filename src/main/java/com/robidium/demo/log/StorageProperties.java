@@ -5,17 +5,44 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-	/**
-	 * Folder location for storing files
-	 */
-	private String location = "log-dir";
+    /**
+     * Folder location for storing logs
+     */
+    private String logsLocation = "log-dir";
 
-	public String getLocation() {
-		return location;
-	}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+    /**
+     * * Folder location for storing spmf input and output
+     */
+    private String spmfLocation = "spmf";
 
+    /**
+     * * Folder location for storing info about pattern for the compiler
+     */
+    private String patternInfoLocation = "compiler-input";
+
+
+    public String getLogsLocation() {
+        return logsLocation;
+    }
+
+    public void setLogsLocation(String logsLocation) {
+        this.logsLocation = logsLocation;
+    }
+
+    public String getSpmfLocation() {
+        return spmfLocation;
+    }
+
+    public void setSpmfLocation(String spmfLocation) {
+        this.spmfLocation = spmfLocation;
+    }
+
+    public String getPatternInfoLocation() {
+        return patternInfoLocation;
+    }
+
+    public void setPatternInfoLocation(String patternInfoLocation) {
+        this.patternInfoLocation = patternInfoLocation;
+    }
 }

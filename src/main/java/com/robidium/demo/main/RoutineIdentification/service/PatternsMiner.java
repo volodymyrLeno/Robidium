@@ -1,6 +1,7 @@
 package com.robidium.demo.main.RoutineIdentification.service;
 
 import com.robidium.demo.cases.CaseService;
+import com.robidium.demo.log.StorageProperties;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.RoutineIdentification.data.PatternItem;
 import com.robidium.demo.main.Segmentation.data.Node;
@@ -8,8 +9,10 @@ import com.robidium.demo.main.data.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,17 +25,21 @@ import static java.util.stream.Collectors.toMap;
 
 @Component
 public class PatternsMiner {
+    private static Path spmfLocation;
+
     private static List<Pattern> patterns;
     private static CaseService caseService;
 
     @Autowired
-    public PatternsMiner(CaseService caseService) {
+    public PatternsMiner(StorageProperties properties, CaseService caseService) {
+        PatternsMiner.spmfLocation = Paths.get(properties.getSpmfLocation());
         PatternsMiner.caseService = caseService;
     }
 
-    public static List<Pattern> discoverPatterns(Map<Integer, List<Event>> cases, SPMFAlgorithmName algorithm,
+    public static List<Pattern> discoverPatterns(SPMFAlgorithmName algorithm,
                                                  Double minSupport, Double minCoverage, String metric) {
         patterns = new ArrayList<>();
+        Map<Integer, List<Event>> cases = caseService.getCases();
 
         List<String> supportedMetrics = new ArrayList<>() {{
             add("frequency");
@@ -84,29 +91,29 @@ public class PatternsMiner {
             cases = (ArrayList<String>[]) new ArrayList[temp.size()];
             for (int i = 0; i < cases.length; i++)
                 cases[i] = new ArrayList<>(temp.get(i));
-            writeFile(convertToSPMF(cases), "input.txt");
+            writeFile(convertToSPMF(cases), spmfLocation + "/input.txt");
             runSFPM(algorithm, support);
 
             List<Pattern> ptrns;
 
             switch (metric) {
                 case "frequency": {
-                    ptrns = rankBySupport(extractPatterns(parseSequences("output.txt", algorithm))).stream().filter(pattern ->
+                    ptrns = rankBySupport(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm))).stream().filter(pattern ->
                             pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
                 case "coverage": {
-                    ptrns = rankByCoverage(extractPatterns(parseSequences("output.txt", algorithm)), originalCases).stream().filter(pattern ->
+                    ptrns = rankByCoverage(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm)), originalCases).stream().filter(pattern ->
                             pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
                 case "length": {
-                    ptrns = rankByLength(extractPatterns(parseSequences("output.txt", algorithm))).stream().filter(pattern ->
+                    ptrns = rankByLength(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm))).stream().filter(pattern ->
                             pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
                 case "cohesion": {
-                    ptrns = rankByCohesion(extractPatterns(parseSequences("output.txt", algorithm)), originalCases).
+                    ptrns = rankByCohesion(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm)), originalCases).
                             stream().filter(pattern -> pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
@@ -214,7 +221,7 @@ public class PatternsMiner {
 
         // Clear spmf output content
         try {
-            PrintWriter writer = new PrintWriter(new File("output.txt"));
+            PrintWriter writer = new PrintWriter(new File(spmfLocation + "/output.txt"));
             writer.print("");
 
             writer.close();
@@ -227,11 +234,11 @@ public class PatternsMiner {
             List<String> commands = new ArrayList<>() {{
                 add("java");
                 add("-jar");
-                add("spmf.jar");
+                add("spmf\\spmf.jar");
                 add("run");
                 add(algorithm.value);
-                add("input.txt");
-                add("output.txt");
+                add("spmf\\input.txt");
+                add("spmf\\output.txt");
                 add(minSupp.toString());
             }};
             pb.command(commands);
@@ -320,10 +327,10 @@ public class PatternsMiner {
         return stringBuilder;
     }
 
-    static List<String> parseSequences(String fileName, SPMFAlgorithmName algorithm) {
+    static List<String> parseSequences(Path filePath, SPMFAlgorithmName algorithm) {
         List<String> sequences = new ArrayList<>();
 
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
+        try (Stream<String> stream = Files.lines(filePath)) {
             stream.forEach(sequences::add);
         } catch (IOException e) {
             e.printStackTrace();
@@ -364,18 +371,18 @@ public class PatternsMiner {
         return sequences;
     }
 
+    private static List<Pattern> rankBySupport(List<Pattern> patterns) {
+        List<Pattern> rankedPatterns = new ArrayList<>(patterns);
+        rankedPatterns.sort(comparing(Pattern::getAbsoluteSupport).reversed());
+        return rankedPatterns;
+    }
+
 
     /*public static List<Pattern> rankBySupport(List<Pattern> patterns){
         List<Pattern> rankedPatterns = new ArrayList<>(patterns);
         rankedPatterns.sort(comparing(Pattern::getRelativeSupport).reversed());
         return rankedPatterns;
     }*/
-
-    private static List<Pattern> rankBySupport(List<Pattern> patterns) {
-        List<Pattern> rankedPatterns = new ArrayList<>(patterns);
-        rankedPatterns.sort(comparing(Pattern::getAbsoluteSupport).reversed());
-        return rankedPatterns;
-    }
 
     private static List<Pattern> rankByLength(List<Pattern> patterns) {
         List<Pattern> rankedPatterns = new ArrayList<>(patterns);
@@ -490,27 +497,6 @@ public class PatternsMiner {
         return occurences;
     }
 
-    /*
-    private List<String> getOutliers(String sequence, List<String> pattern) {
-        List<String> outliers = new ArrayList<>();
-        List<Integer> indexes = new ArrayList<>();
-        Matcher m = getPattern(pattern).matcher(sequence);
-
-        for (int i = 2; i < 2 * pattern.size() - 1; i += 2) {
-            indexes.add(i);
-        }
-
-        if (m.find()) {
-            indexes.forEach(index -> outliers.addAll(Arrays.asList(m.group(index).split(","))));
-            StringJoiner anyElement = new StringJoiner("|", "[", "]");
-            itemset.forEach(anyElement::add);
-            outliers.removeIf(item -> item == null || "".equals(item) || item.matches(anyElement.toString()));
-        }
-
-        return outliers;
-    }
-    */
-
     private static HashMap<Pattern, Double> computeCoverages(List<Pattern> patterns, Map<Integer, List<Event>> cases, List<Event> events) {
         var sequences = toSequences(cases);
 
@@ -574,6 +560,27 @@ public class PatternsMiner {
         }
         return coverages;
     }
+
+    /*
+    private List<String> getOutliers(String sequence, List<String> pattern) {
+        List<String> outliers = new ArrayList<>();
+        List<Integer> indexes = new ArrayList<>();
+        Matcher m = getPattern(pattern).matcher(sequence);
+
+        for (int i = 2; i < 2 * pattern.size() - 1; i += 2) {
+            indexes.add(i);
+        }
+
+        if (m.find()) {
+            indexes.forEach(index -> outliers.addAll(Arrays.asList(m.group(index).split(","))));
+            StringJoiner anyElement = new StringJoiner("|", "[", "]");
+            itemset.forEach(anyElement::add);
+            outliers.removeIf(item -> item == null || "".equals(item) || item.matches(anyElement.toString()));
+        }
+
+        return outliers;
+    }
+    */
 
     private static List<String>[] toSequences(Map<Integer, List<Event>> cases) {
         ArrayList<String>[] sequences = (ArrayList<String>[]) new ArrayList[cases.size()];

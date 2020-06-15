@@ -5,7 +5,6 @@ import com.robidium.demo.main.AutomatabilityAssessment.service.Foofah.FoofahServ
 import com.robidium.demo.main.AutomatabilityAssessment.service.FunctionalDependencies.ItemsDependencyService;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.RoutineIdentification.service.PatternsMiner;
-import com.robidium.demo.main.Segmentation.service.SegmentsDiscoverer;
 import com.robidium.demo.main.data.Event;
 import com.robidium.demo.main.utils.LogReader;
 import com.robidium.demo.main.utils.Parser;
@@ -47,21 +46,14 @@ public class RoutineMinerController {
             Parser.setContextAttributes(groupedEvents.get(key), configuration.getContext());
         }
 
-        Map<Integer, List<Event>> cases;
+        caseService.extractCases(events, configuration.isSegmented());
 
-        if (!configuration.isSegmented()) {
-            SegmentsDiscoverer disco = new SegmentsDiscoverer();
-            cases = disco.extractSegments(events);
-        } else {
-            cases = caseService.extractCases(events);
-        }
-
-        List<Pattern> patterns = patternService.extractAll(cases, PatternsMiner.SPMFAlgorithmName.valueOf(configuration.getAlgorithm()),
+        List<Pattern> patterns = patternService.extractAll(PatternsMiner.SPMFAlgorithmName.valueOf(configuration.getAlgorithm()),
                 configuration.getMinSupport(), configuration.getMinCoverage(), configuration.getMetric());
 
         if (patterns != null) {
-            patterns.forEach(pattern -> pattern.setTransformations(foofahService.findTransformations(cases, pattern)));
-            patterns.forEach(pattern -> pattern.setItemsDependencies(itemsDependencyService.findDependencies(cases, pattern)));
+            patterns.forEach(pattern -> pattern.setTransformations(foofahService.findTransformations(pattern)));
+            patterns.forEach(pattern -> pattern.setItemsDependencies(itemsDependencyService.findDependencies(pattern)));
         }
 
         return new ResponseEntity<>(patterns, HttpStatus.OK);

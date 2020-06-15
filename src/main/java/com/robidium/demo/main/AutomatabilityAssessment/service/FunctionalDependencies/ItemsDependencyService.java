@@ -20,9 +20,9 @@ public class ItemsDependencyService {
         this.taneService = taneService;
     }
 
-    public List<ItemsDependency> findDependencies(Map<Integer, List<Event>> cases, Pattern pattern) {
+    public List<ItemsDependency> findDependencies(Pattern pattern) {
         List<ItemsDependency> itemsDependencies = new ArrayList<>();
-        List<TaneDependency> functionalDependencies = taneService.getFunctionalDependencies(cases, pattern);
+        List<TaneDependency> functionalDependencies = taneService.getFunctionalDependencies(pattern);
         var emptyTransformationPairs = pattern.getEmptyTransformationPairs();
 
         emptyTransformationPairs.forEach(pair -> {

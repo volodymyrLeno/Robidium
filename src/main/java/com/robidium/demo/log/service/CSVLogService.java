@@ -29,7 +29,7 @@ public class CSVLogService implements LogService {
 
     @Autowired
     public CSVLogService(StorageProperties properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
+        this.rootLocation = Paths.get(properties.getLogsLocation());
     }
 
     @Override
