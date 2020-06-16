@@ -36,7 +36,7 @@ import { Button, Grid, Paper, TableContainer, Card, CardHeader, CardContent,
                     {item.value.split("+").map(value => {
                       return (
                         <TableCell align="left">
-                          <Typography variant="body2" noWrap style={{maxWidth: 200,}}>
+                          <Typography variant="body2" noWrap style={{maxWidth: 100,}}>
                             {value}
                           </Typography>
                         </TableCell>
