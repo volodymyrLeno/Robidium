@@ -33,7 +33,7 @@ public class TransformationsExtractor {
         PatternEventsFlowExtractor extractor = new PatternEventsFlowExtractor();
         Map<PatternItem, List<PatternItem>> writesPerReadEvents = extractor.extractWriteEventsPerReadEvent(pattern);
         Map<Pair<PatternItem, PatternItem>, List<Transformation>> transformationsPerReadWrite = new LinkedHashMap<>();
-        List<Transformation> examples = extractAllTransformations(caseService.getCases());
+        List<Transformation> examples = extractAllTransformations();
 
         writesPerReadEvents.forEach((key, value) -> value.forEach(writeEvent -> {
             if (key != null) {
@@ -67,11 +67,11 @@ public class TransformationsExtractor {
         return data;
     }
 
-    public List<Transformation> extractAllTransformations(Map<Integer, List<Event>> cases) {
+    public List<Transformation> extractAllTransformations() {
         List<Transformation> transformations = new ArrayList<>();
 
-        for (Integer caseID : cases.keySet()) {
-            List<Event> events = new ArrayList<>(cases.get(caseID));
+        for (Integer caseID : caseService.getCases().keySet()) {
+            List<Event> events = new ArrayList<>(caseService.getCases().get(caseID));
             List<String> targets = new ArrayList<>();
 
             for (int i = events.size() - 1; i >= 0; i--) {

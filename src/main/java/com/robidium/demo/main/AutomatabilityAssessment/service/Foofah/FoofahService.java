@@ -95,7 +95,6 @@ public class FoofahService {
         String output = null;
         try {
             File foofahFile = new File(FoofahExecutor.getFoofahPath() + "/foofah.temp");
-            foofahFile.deleteOnExit();
 
             FileWriter fileWriter = new FileWriter(foofahFile);
             for (Transformation t : transformations) {
