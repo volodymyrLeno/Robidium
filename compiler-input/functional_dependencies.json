@@ -1,9 +1,4 @@
 [ {
-  "depender_idx" : "20",
-  "values" : [ {
-    "depender_value" : "on"
-  } ]
-}, {
   "dependee_idx" : [ "17" ],
   "depender_idx" : "18",
   "values" : [ {
@@ -78,5 +73,10 @@
   }, {
     "dependee_values" : [ "Poland" ],
     "depender_value" : "+48"
+  } ]
+}, {
+  "depender_idx" : "20",
+  "values" : [ {
+    "depender_value" : "on"
   } ]
 } ]

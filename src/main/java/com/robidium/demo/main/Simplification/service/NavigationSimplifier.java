@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 public class NavigationSimplifier {
     private static String redundantClickTextFieldRegex = "((\"([^\"]|\"\")*\",){3}\"clickTextField\",.*\\n*)";
 
-    private static String redundantExcelNavigation = "((\\\"([^\\\"]|\\\"\\\")*\\\",){3}\\\"getCell\\\",.*\\\\n*)|\" +\n" +
-            "                \"((\\\"([^\\\"]|\\\"\\\")*\\\",){3}\\\"getRange\\\",.*\\\\n*)";
+    private static String redundantExcelNavigation = "((\"([^\"]|\"\")*\",){3}\"getCell\",.*\\n*)|" +
+            "((\"([^\"]|\"\")*\",){3}\"getRange\",.*\\n*)";
 
     static boolean containsRedundantClickTextField(String log) {
         Pattern pattern = Pattern.compile(redundantClickTextFieldRegex);

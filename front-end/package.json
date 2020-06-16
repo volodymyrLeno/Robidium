@@ -13,7 +13,7 @@
     "js-file-download": "^0.4.12",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "^2.1.8"
   },
   "scripts": {
     "start": "react-scripts start",

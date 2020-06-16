@@ -46,7 +46,7 @@ public class RoutineMinerController {
             Parser.setContextAttributes(groupedEvents.get(key), configuration.getContext());
         }
 
-        caseService.extractCases(events, configuration.isSegmented());
+        caseService.extractCases(events, configuration.isSegmented(), configuration.getContext());
 
         List<Pattern> patterns = patternService.extractAll(PatternsMiner.SPMFAlgorithmName.valueOf(configuration.getAlgorithm()),
                 configuration.getMinSupport(), configuration.getMinCoverage(), configuration.getMetric());

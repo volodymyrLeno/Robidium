@@ -1,25 +1,25 @@
 [ {
-  "index" : "8",
-  "type" : "synthetic"
-}, {
-  "index" : "11",
+  "index" : "5",
   "type" : "synthetic"
 }, {
   "index" : "17",
   "type" : "synthetic"
 }, {
-  "index" : "2",
+  "index" : "11",
   "type" : "synthetic"
 }, {
-  "index" : "5",
+  "index" : "8",
   "type" : "synthetic"
 }, {
   "index" : "14",
   "type" : "synthetic"
 }, {
-  "index" : "20",
-  "type" : "semantic"
+  "index" : "2",
+  "type" : "synthetic"
 }, {
   "index" : "18",
+  "type" : "semantic"
+}, {
+  "index" : "20",
   "type" : "semantic"
 } ]

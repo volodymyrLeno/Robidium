@@ -4,6 +4,7 @@ import com.robidium.demo.main.AutomatabilityAssessment.data.Sequence;
 import com.robidium.demo.main.RoutineIdentification.data.Pattern;
 import com.robidium.demo.main.Segmentation.data.Node;
 import com.robidium.demo.main.Segmentation.service.SegmentsDiscoverer;
+import com.robidium.demo.main.Simplification.service.SimplifierService;
 import com.robidium.demo.main.data.Event;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,15 @@ public class CaseService {
 
     private Map<Integer, List<Event>> cases;
 
-    public void extractCases(List<Event> events, boolean isSegmented) {
+    public void extractCases(List<Event> events, boolean isSegmented, List<String> context) {
         if (isSegmented) {
             cases = extractSegmentedCases(events);
         } else {
+            events = SimplifierService.applyPreprocessing(events, context);
             SegmentsDiscoverer disco = new SegmentsDiscoverer();
             cases = disco.extractSegments(events);
         }
+        //cases = SimplifierService.applyPreprocessing(cases, context);
     }
 
     private Map<Integer, List<Event>> extractSegmentedCases(List<Event> events) {

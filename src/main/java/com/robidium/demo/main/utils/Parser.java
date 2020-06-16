@@ -52,29 +52,6 @@ public final class Parser {
         return sequences;
     }
 
-    static String eventListToString(List<Event> events){
-        String[] header = {"caseID", "timeStamp", "userID", "targetApp", "eventType", "url", "content", "target.workbookName",
-                "target.sheetName", "target.id", "target.class", "target.tagName", "target.type", "target.name",
-                "target.value", "target.innerText", "target.checked", "target.href", "target.option", "target.title", "target.innerHTML"
-        };
-        String str = "";
-        for(var event: events){
-            str += "\"" + event.getTimestamp() + "\",";
-            str += event.payload.containsKey("userID") ? "\"" + event.payload.get("userID") + "\"," : "\"\",";
-            str += event.payload.containsKey("targetApp") ? "\"" + event.payload.get("targetApp") + "\"," : "\"\",";
-            str += "\"" + event.getEventType() + "\",";
-
-            for(int i = 5; i < header.length; i++)
-                if(event.payload.containsKey(header[i]) && !event.payload.get(header[i]).equals("\"\""))
-                    str += "\"" + event.payload.get(header[i]) + "\",";
-                else
-                    str += "\"\",";
-
-            str = str.substring(0, str.lastIndexOf(",")) + "\n";
-        }
-        return str;
-    }
-
     public static List<String> extractContextAttributes(String filePath){
         List<String> contextAttributes = new ArrayList<>();
         JSONParser parser = new JSONParser();

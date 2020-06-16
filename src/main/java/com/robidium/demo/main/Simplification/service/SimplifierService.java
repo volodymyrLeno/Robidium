@@ -5,20 +5,62 @@ import com.robidium.demo.main.Simplification.utils.SimplifierUtils;
 import com.robidium.demo.main.data.Event;
 import com.robidium.demo.main.utils.LogReader;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SimplifierService {
+    public static List<Event> applyPreprocessing(List<Event> ev, List<String> context){
+        /*
+        String[] header = {"timeStamp", "userID", "targetApp", "eventType", "url", "content", "target.workbookName",
+                "target.sheetName", "target.id", "target.class", "target.tagName", "target.type", "target.name",
+                "target.value", "target.innerText", "target.checked", "target.href", "target.option", "target.title", "target.innerHTML"};
+        */
+        String events = SimplifierUtils.eventListToString(ev);
 
-    public static List<Event> applyPreprocessing(String filePath, String events, Boolean segmented){
+        List<String> attributes = ev.get(0).getAttributes();
+
         events = Preprocessing.sortLog(events);
         events = Preprocessing.deleteChromeClipboardCopy(events);
         events = Preprocessing.mergeNavigationCellCopy(events);
         events = Preprocessing.identifyPasteAction(events);
 
         events = NavigationSimplifier.removeRedundantClickTextField(events);
-        events = NavigationSimplifier.removeExcelNavigation(events);
+        //events = NavigationSimplifier.removeExcelNavigation(events);
 
-        if(segmented){
+        while (ReadSimplifier.containsRedundantCopy(events) ||
+                ReadSimplifier.containsSingleCopy(events)) {
+            events = ReadSimplifier.removeRedundantCopy(events);
+            events = ReadSimplifier.removeSingleCopy(events);
+        }
+
+        return SimplifierUtils.toEvents(events, 0, attributes, -1, context);
+    }
+
+    public static Map<Integer, List<Event>> applyPreprocessing(Map<Integer, List<Event>> cases, List<String> context){
+        Map<Integer, List<Event>> preprocessedCases = new HashMap<>();
+
+        /*
+        String[] header = {"caseID", "timeStamp", "userID", "targetApp", "eventType", "url", "content", "target.workbookName",
+                "target.sheetName", "target.id", "target.class", "target.tagName", "target.type", "target.name",
+                "target.value", "target.innerText", "target.checked", "target.href", "target.option", "target.title", "target.innerHTML"};
+        */
+
+        int offset = 0;
+
+        for(var key: cases.keySet()){
+            List<String> attributes = cases.get(key).get(0).getAttributes();
+
+            String events = SimplifierUtils.eventListToString(cases.get(key));
+            events = Preprocessing.sortLog(events);
+            events = Preprocessing.deleteChromeClipboardCopy(events);
+            events = Preprocessing.mergeNavigationCellCopy(events);
+            events = Preprocessing.identifyPasteAction(events);
+
+            events = NavigationSimplifier.removeRedundantClickTextField(events);
+            //events = NavigationSimplifier.removeExcelNavigation(events);
+
             while (ReadSimplifier.containsRedundantCopy(events) ||
                     ReadSimplifier.containsSingleCopy(events) ||
                     WriteSimplifier.containsRedundantDoublePaste(events) ||
@@ -37,16 +79,11 @@ public class SimplifierService {
                 events = WriteSimplifier.removeRedundantPasteIntoRange(events);
                 events = WriteSimplifier.removeRedundantDoubleEditField(events);
             }
+
+            preprocessedCases.put(key, SimplifierUtils.toEvents(events, offset, attributes, key, context));
+            offset += cases.get(key).size();
         }
-        else{
-            while (ReadSimplifier.containsRedundantCopy(events) ||
-                    ReadSimplifier.containsSingleCopy(events)) {
-                events = ReadSimplifier.removeRedundantCopy(events);
-                events = ReadSimplifier.removeSingleCopy(events);
-            }
-        }
-        String preprocessedLog = filePath.substring(0, filePath.lastIndexOf(".")) + "_preprocessed.csv";
-        SimplifierUtils.writeDataLineByLine(preprocessedLog, events);
-        return LogReader.readCSV(preprocessedLog);
+
+        return preprocessedCases;
     }
 }

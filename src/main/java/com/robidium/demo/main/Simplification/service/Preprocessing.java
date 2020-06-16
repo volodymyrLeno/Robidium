@@ -73,8 +73,8 @@ public class Preprocessing {
         log = mergeGetRangeCopy(log);
         log = mergeEditCellCopy(log);
 
-        //log = log.replaceAll("((\"([^\"]|\"\")*\",){3}\"getCell\",.*\\n*)|" +
-        //        "((\"([^\"]|\"\")*\",){3}\"getRange\",.*\\n*)", "");
+        log = log.replaceAll("((\"([^\"]|\"\")*\",){3}\"getCell\",.*\\n*)|" +
+                "((\"([^\"]|\"\")*\",){3}\"getRange\",.*\\n*)", "");
 
         return log;
     }
