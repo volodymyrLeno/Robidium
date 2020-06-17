@@ -8,6 +8,9 @@ foofah/
 ### compiler input ###
 compiler-input/
 
+### tane ###
+tane-1.0/
+
 ### STS ###
 .apt_generated
 .classpath

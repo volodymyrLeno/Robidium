@@ -11,7 +11,7 @@ public class Select extends UIPathElement {
         selectItem = doc.createElement("ui:SelectItem");
         selectItem.setAttribute("DisplayName", "Select Item");
         selectItem.setAttribute("Item", action.getTargetValue());
-        setTarget(action.getTargetId());
+        setTarget(action.getTargetName());
         doSequence.appendChild(selectItem);
     }
 
@@ -19,7 +19,11 @@ public class Select extends UIPathElement {
         Element target = doc.createElement("ui:Target");
         target.setAttribute("Selector", String.format("&lt;webctrl name='%s' /&gt;", id));
         target.setAttribute("WaitForReady", "COMPLETE");
-        selectItem.appendChild(doc.createElement("ui:SelectItem.Target").appendChild(target));
+
+        Element elementTarget = doc.createElement("ui:SelectItem.Target");
+        elementTarget.appendChild(target);
+
+        selectItem.appendChild(elementTarget);
     }
 
     @Override
