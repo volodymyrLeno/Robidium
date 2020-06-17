@@ -37,10 +37,12 @@ public class ImperativeCompiler {
     private static void parseActions(List<Action> actions) {
         previousAction = actions.get(0);
         for (Action action : actions) {
-            createScope(action);
-            if (!addElement(action)) {
+            if (action.getEventType().equals("paste")) {
                 continue;
             }
+
+            createScope(action);
+            action.accept(new CreateActionVisitor(), scriptBuilder);
             previousAction = action;
         }
     }
@@ -56,20 +58,5 @@ public class ImperativeCompiler {
         } else if (!currentApp.equals(previousAction.getTargetApp())) {
             scriptBuilder.createNewScope(action.getTargetApp(), action.getWorkbookName());
         }
-    }
-
-    private static boolean addElement(Action action) {
-        String actionName = action.getEventType();
-        String previousActionName = previousAction.getEventType();
-//        if (actionName.equals("editField") && previousActionName.equals("paste") &&
-//                previousAction.getTargetName().equals(action.getTargetName())) {
-//            return false;
-//        }
-        if (actionName.equals("paste")) {
-            return false;
-        }
-        action.accept(new CreateActionVisitor(), scriptBuilder);
-
-        return true;
     }
 }

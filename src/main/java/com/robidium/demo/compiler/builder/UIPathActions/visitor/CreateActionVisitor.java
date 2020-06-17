@@ -32,28 +32,32 @@ public class CreateActionVisitor implements Visitor {
         }
 
         if (action.getEventType().equalsIgnoreCase("editField")) {
-            if (TransformationMap.getInstance().getActionTransformations().containsKey(String.valueOf(action.getIndex()))) {
-                if (TransformationMap.getInstance().getActionTransformations().get(String.valueOf(action.getIndex())).equals("synthetic")) {
-                    new AssignString(TransformationService.getInstance().getTransformationsByAction(action)
-                            .get(0).getTarget(), scriptBuilder.getTarget());
-                    scriptBuilder.getSourceSwitchController().createSourceSwitch(action);
-                    new ImperativePaste(action.getTargetName(), Variables.TRANSFORMED_VALUE);
-                    new AddToDictionary(ValuePerIndex.NAME, String.valueOf(action.getIndex()), Variables.TRANSFORMED_VALUE);
-                } else if (TransformationMap.getInstance().getActionTransformations().get(String.valueOf(action.getIndex())).equals("semantic")) {
-                    List<String> dependee = DependencyService.getInstance().getDependeeByDepender(String.valueOf(action.getIndex()));
-                    if (dependee.isEmpty()) {
-                        Dependency dependency = DependencyService.getInstance().getDependencyByDependerIndex(action.getIndex());
-                        new ImperativePaste(action.getTargetName(), String.format("&quot;%s&quot;", dependency.getDependerPerDependee().get("")));
-                        new AddToDictionary(ValuePerIndex.NAME, String.valueOf(action.getIndex()),
-                                String.format("&quot;%s&quot;", dependency.getDependerPerDependee().get("")));
-                    } else {
-                        String text = dependee.stream().map(d -> String.format("valuePerIndex.Item(&quot;%s&quot;)", d))
-                                .collect(Collectors.joining("+ &quot;,&quot; +"));
-                        new ImperativePaste(action.getTargetName(), String.format("FD.Item(%s)", text));
-                        new AddToDictionary(ValuePerIndex.NAME, String.valueOf(action.getIndex()), String.format("FD.Item(%s)", text));
+            if (action.getTargetTagName().equalsIgnoreCase("select")) {
+                Select.of(action);
+            } else {
+                if (TransformationMap.getInstance().getActionTransformations().containsKey(String.valueOf(action.getIndex()))) {
+                    if (TransformationMap.getInstance().getActionTransformations().get(String.valueOf(action.getIndex())).equals("synthetic")) {
+                        new AssignString(TransformationService.getInstance().getTransformationsByAction(action)
+                                .get(0).getTarget(), scriptBuilder.getTarget());
+                        scriptBuilder.getSourceSwitchController().createSourceSwitch(action);
+                        new ImperativePaste(action.getTargetName(), Variables.TRANSFORMED_VALUE);
+                        new AddToDictionary(ValuePerIndex.NAME, String.valueOf(action.getIndex()), Variables.TRANSFORMED_VALUE);
+                    } else if (TransformationMap.getInstance().getActionTransformations().get(String.valueOf(action.getIndex())).equals("semantic")) {
+                        List<String> dependee = DependencyService.getInstance().getDependeeByDepender(String.valueOf(action.getIndex()));
+                        if (dependee.isEmpty()) {
+                            Dependency dependency = DependencyService.getInstance().getDependencyByDependerIndex(action.getIndex());
+                            new ImperativePaste(action.getTargetName(), String.format("&quot;%s&quot;", dependency.getDependerPerDependee().get("")));
+                            new AddToDictionary(ValuePerIndex.NAME, String.valueOf(action.getIndex()),
+                                    String.format("&quot;%s&quot;", dependency.getDependerPerDependee().get("")));
+                        } else {
+                            String text = dependee.stream().map(d -> String.format("valuePerIndex.Item(&quot;%s&quot;)", d))
+                                    .collect(Collectors.joining("+ &quot;,&quot; +"));
+                            new ImperativePaste(action.getTargetName(), String.format("FD.Item(%s)", text));
+                            new AddToDictionary(ValuePerIndex.NAME, String.valueOf(action.getIndex()), String.format("FD.Item(%s)", text));
+                        }
                     }
+                    return;
                 }
-                return;
             }
         }
 

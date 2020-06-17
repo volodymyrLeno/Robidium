@@ -1,6 +1,5 @@
 import React from "react";
 import { Fab, Box } from '@material-ui/core';
-import green from '@material-ui/core/colors/green';
 import BackupIcon from '@material-ui/icons/Backup';
 import axios from 'axios';
 
@@ -46,7 +45,7 @@ class UploadLogInput extends React.Component {
           <Fab variant="extended" component="span">
             <Box display="flex">
               <Box display="flex" mr={1}>
-                <BackupIcon style={{ color: green[500] }} />
+                <BackupIcon color="primary" />
               </Box>
               Upload Log
             </Box>

@@ -50,24 +50,27 @@ public class PatternSerializer {
 
             firstContainingCase.forEach(event -> {
                 List<String> data = new ArrayList<>();
+
                 data.add(event.getTimestamp());
                 data.add(event.getPayload().get("userID"));
                 data.add(event.getPayload().get("targetApp"));
                 data.add(event.getEventType());
-                for (int i = 5; i < event.getAttributes().size(); i++) {
-                    String attr = event.getAttributes().get(i);
 
-                    // Remove non-context part of copyCell event
+                event.getAttributes().forEach(attr -> {
                     if (event.getEventType().equalsIgnoreCase("copyCell") &&
                             attr.equalsIgnoreCase("target.id")) {
                         String column = event.getContext().getOrDefault("target.column", "");
                         String row = event.getContext().getOrDefault("target.row", "");
                         data.add(column + row);
-                        continue;
+                    } else if (!attr.equalsIgnoreCase("caseID") &&
+                            !attr.equalsIgnoreCase("timestamp") &&
+                            !attr.equalsIgnoreCase("userID") &&
+                            !attr.equalsIgnoreCase("targetApp") &&
+                            !attr.equalsIgnoreCase("eventType")) {
+                        data.add(event.getPayload().get(attr));
                     }
+                });
 
-                    data.add(event.getPayload().get(attr));
-                }
                 csvWriter.writeNext(data.toArray(new String[0]));
             });
 
