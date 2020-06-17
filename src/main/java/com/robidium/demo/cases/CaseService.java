@@ -44,6 +44,19 @@ public class CaseService {
         return cases;
     }
 
+    public List<Event> getFirsOccurrence(Pattern pattern) {
+        List<Event> occurrence = new ArrayList<>();
+
+        List<Event> firstContainingCase = getFirstContainingCase(pattern);
+        for (int i = 0; i < pattern.getItems().size(); i++) {
+            if (pattern.getItemsValues().get(i).contains(firstContainingCase.get(i).getEventType())) {
+                occurrence.add(firstContainingCase.get(i));
+            }
+        }
+
+        return occurrence;
+    }
+
     public List<Event> getFirstContainingCase(Pattern pattern) {
         return IntStream.range(1, cases.size())
                 .mapToObj(i -> new Sequence(i, caseToString(cases.get(i))))

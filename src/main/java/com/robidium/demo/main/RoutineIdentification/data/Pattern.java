@@ -141,20 +141,6 @@ public class Pattern implements Comparable<Pattern> {
         return root.toPrettyString();
     }
 
-    private String transformationsToString() {
-        StringBuilder str = new StringBuilder();
-        str.append("[");
-        transformations.forEach((k, v) -> {
-            str.append("\n\t\t\t\t\t\t{\n");
-            str.append(k.getLeft()).append(" -> ").append(k.getRight()).append(": ");
-            str.append(v.trim().replaceAll("\n", "; "));
-            str.append("\n\t\t\t\t\t\t},");
-        });
-        str.append("\n\t\t\t\t\t]");
-
-        return str.toString();
-    }
-
     public Double getRelativeSupport() {
         return this.relSupport;
     }
@@ -196,13 +182,6 @@ public class Pattern implements Comparable<Pattern> {
     public int hashCode() {
         return Objects.hash(this.getItemsValues());
     }
-
-    /*
-    @Override
-    public String toString(){
-        return this.getItemsValues().toString();
-    }
-    */
 
     @Override
     public int compareTo(Pattern e) {

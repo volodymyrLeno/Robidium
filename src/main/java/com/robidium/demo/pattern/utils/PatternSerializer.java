@@ -40,7 +40,7 @@ public class PatternSerializer {
     }
 
     public static Path writeInstance(Pattern pattern) {
-        List<Event> firstContainingCase = caseService.getFirstContainingCase(pattern);
+        List<Event> firstOccurrence = caseService.getFirsOccurrence(pattern);
 
         File file = new File(rootLocation + "/pattern.csv");
         try {
@@ -48,7 +48,7 @@ public class PatternSerializer {
 
             csvWriter.writeNext(columns);
 
-            firstContainingCase.forEach(event -> {
+            firstOccurrence.forEach(event -> {
                 List<String> data = new ArrayList<>();
 
                 data.add(event.getTimestamp());
