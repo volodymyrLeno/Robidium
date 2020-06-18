@@ -7,11 +7,11 @@ import org.w3c.dom.Element;
 public class Select extends UIPathElement {
     private static Element selectItem;
 
-    public static void of(Action action) {
+    public static void of(String id, String value) {
         selectItem = doc.createElement("ui:SelectItem");
         selectItem.setAttribute("DisplayName", "Select Item");
-        selectItem.setAttribute("Item", action.getTargetValue());
-        setTarget(action.getTargetName());
+        selectItem.setAttribute("Item", String.format("[%s]", value));
+        setTarget(id);
         doSequence.appendChild(selectItem);
     }
 

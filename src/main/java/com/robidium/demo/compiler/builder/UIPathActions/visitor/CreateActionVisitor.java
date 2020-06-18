@@ -33,7 +33,16 @@ public class CreateActionVisitor implements Visitor {
 
         if (action.getEventType().equalsIgnoreCase("editField")) {
             if (action.getTargetTagName().equalsIgnoreCase("select")) {
-                Select.of(action);
+                if (TransformationMap.getInstance().getActionTransformations().containsKey(String.valueOf(action.getIndex()))) {
+                    if (TransformationMap.getInstance().getActionTransformations().get(String.valueOf(action.getIndex())).equals("semantic")) {
+                        List<String> dependee = DependencyService.getInstance().getDependeeByDepender(String.valueOf(action.getIndex()));
+                        String value = dependee.stream().map(d -> String.format("valuePerIndex.Item(&quot;%s&quot;)", d))
+                                .collect(Collectors.joining("+ &quot;,&quot; +"));
+                        Select.of(action.getTargetName(), String.format("FD.Item(%s)", value));
+                    } else {
+                        Select.of(action.getTargetName(), action.getTargetValue());
+                    }
+                }
             } else {
                 if (TransformationMap.getInstance().getActionTransformations().containsKey(String.valueOf(action.getIndex()))) {
                     if (TransformationMap.getInstance().getActionTransformations().get(String.valueOf(action.getIndex())).equals("synthetic")) {
