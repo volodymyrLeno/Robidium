@@ -1,17 +1,14 @@
 import React from 'react'
 import GenerateScriptInput from './GenerateScriptInput'
 import { Button, Grid, Paper, TableContainer, Card, CardHeader, CardContent,
-  Table, TableBody, TableCell, TableRow, ExpansionPanel, ExpansionPanelSummary,
-  ExpansionPanelDetails, Radio, FormControlLabel, LinearProgress, Dialog, Box,
-  DialogContent, DialogTitle, DialogActions, DialogContentText, Typography,
-  Divider, Fab} from '@material-ui/core';
-  import axios from 'axios';
-  import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-  import SaveIcon from '@material-ui/icons/Save';
+  LinearProgress, Dialog, DialogContent, DialogTitle, DialogActions,
+  DialogContentText, Divider } from '@material-ui/core';
 
-  const FileDownload = require('js-file-download');
+import SaveIcon from '@material-ui/icons/Save';
+import RoutineExpansionPanel from './RoutineExpansionPanel'
+const FileDownload = require('js-file-download');
 
-  class RoutinePanel extends React.Component {
+class RoutinePanel extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -22,65 +19,8 @@ import { Button, Grid, Paper, TableContainer, Card, CardHeader, CardContent,
       };
     }
 
-    renderRoutineTable = (routine) => {
-      return (
-        <TableContainer>
-          <Table size="small">
-            <TableBody>
-              {routine.items.map((item, itemIdx) => {
-                return (
-                  <TableRow>
-                    <TableCell align="left">
-                      {itemIdx + 1}
-                    </TableCell>
-                    {item.value.split("+").map(value => {
-                      return (
-                        <TableCell align="left">
-                          <Typography variant="body2" noWrap style={{maxWidth: 100,}}>
-                            {value}
-                          </Typography>
-                        </TableCell>
-                      )
-                    })}
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )
-    }
-
-    renderExpansionPanels = () => {
-      return this.props.routines.map((routine, index) => {
-        return (
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={
-                <ExpandMoreIcon />
-              }
-              aria-label="Expand"
-              >
-              <FormControlLabel
-                onClick={(event) => event.stopPropagation()}
-                onFocus={(event) => event.stopPropagation()}
-                control={
-                  <Radio
-                    checked={this.state.selectedRoutineId === routine.id}
-                    color="primary"
-                    onChange={() => this.setState({selectedRoutineId: routine.id})}
-                    />
-                }
-                label={"Routine " + (index + 1)}
-                />
-
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {this.renderRoutineTable(routine)}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        )
-      })
+    handleRadioClick = (selectedRoutineId) => {
+      this.setState({selectedRoutineId: selectedRoutineId})
     }
 
     handleClose = () => {
@@ -148,7 +88,10 @@ import { Button, Grid, Paper, TableContainer, Card, CardHeader, CardContent,
             <Divider variant="middle" />
               <CardContent>
                 <TableContainer component={Paper}>
-                  {this.renderExpansionPanels()}
+                  <RoutineExpansionPanel
+                    routines={this.props.routines}
+                    selectedRoutineId={this.state.selectedRoutineId}
+                    onRadioClick={this.handleRadioClick} />
                 </TableContainer>
               </CardContent>
           </Card>

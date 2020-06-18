@@ -2,10 +2,10 @@ import React from 'react'
 import UploadLogInput from './UploadLogInput'
 import ConfigPanel from './ConfigPanel'
 import IndentifyRoutinesButton from './IdentifyRoutinesButton'
-import {Card, CardHeader, CardContent, Box, Badge, Avatar, Typography } from '@material-ui/core'
-import {Button, LinearProgress, Grid, Collapse, Divider} from '@material-ui/core'
+import {Card, CardHeader, CardContent, Box, Badge, Typography } from '@material-ui/core'
+import { LinearProgress, Grid, Collapse, Divider} from '@material-ui/core'
 import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined'
-import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
