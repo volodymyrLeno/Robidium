@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TaneExecutor {
-    private static String tanePath = "tane-1.0";
+    private static String tanePath = "/home/ubuntu/Robidium/tane-1.0";
     private List<List<String>> instances;
     private Pattern pattern;
 

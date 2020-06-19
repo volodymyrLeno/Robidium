@@ -28,6 +28,8 @@ public class FoofahService {
         Map<Pair<PatternItem, PatternItem>, String> patternTransformations = new HashMap<>();
         Map<Pair<PatternItem, PatternItem>, List<Transformation>> transformationsPerReadWrite = extractor.getPatternTransformations(pattern);
 
+	System.out.println("foofah find transformations");
+
         transformationsPerReadWrite.forEach((readWritePair, transformations) -> {
             Map<String, List<Transformation>> cluster = Tokenizer.clusterByPattern(transformations);
             String transformation = getFoofahPatternsTransformation(cluster);
@@ -95,7 +97,7 @@ public class FoofahService {
         String output = null;
         try {
             File foofahFile = new File(FoofahExecutor.getFoofahPath() + "/foofah.temp");
-
+	    System.out.println(foofahFile.getAbsolutePath());
             FileWriter fileWriter = new FileWriter(foofahFile);
             for (Transformation t : transformations) {
                 StringBuilder sb = valuesToFoofahJSON(t);

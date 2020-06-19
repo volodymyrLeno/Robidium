@@ -71,7 +71,12 @@
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/repo/bpstruct-0.1.117.jar</systemPath>
-        </dependency>
+    	</dependency>
+
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-tomcat</artifactId>
+	</dependency>
     </dependencies>
 
     <build>

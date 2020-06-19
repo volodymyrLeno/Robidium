@@ -51,9 +51,14 @@ public class RoutineMinerController {
         List<Pattern> patterns = patternService.extractAll(PatternsMiner.SPMFAlgorithmName.valueOf(configuration.getAlgorithm()),
                 configuration.getMinSupport(), configuration.getMinCoverage(), configuration.getMetric());
 
+	System.out.println("inside controller - " + patterns.size());
         if (patterns != null) {
             patterns.forEach(pattern -> pattern.setTransformations(foofahService.findTransformations(pattern)));
+	    System.out.println("===========================================");
+	    System.out.println(patterns.get(0).getTransformations());
             patterns.forEach(pattern -> pattern.setItemsDependencies(itemsDependencyService.findDependencies(pattern)));
+
+	    System.out.println(patterns.get(0).getItemsDependencies().get(0));
         }
 
         return new ResponseEntity<>(patterns, HttpStatus.OK);

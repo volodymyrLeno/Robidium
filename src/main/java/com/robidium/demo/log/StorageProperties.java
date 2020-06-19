@@ -8,18 +8,18 @@ public class StorageProperties {
     /**
      * Folder location for storing logs
      */
-    private String logsLocation = "log-dir";
+    private String logsLocation = "/home/ubuntu/Robidium/log-dir";
 
 
     /**
      * * Folder location for storing spmf input and output
      */
-    private String spmfLocation = "spmf";
+    private String spmfLocation = "/home/ubuntu/Robidium/spmf";
 
     /**
      * * Folder location for storing info about pattern for the compiler
      */
-    private String patternInfoLocation = "compiler-input";
+    private String patternInfoLocation = "/home/ubuntu/Robidium/compiler-input";
 
 
     public String getLogsLocation() {

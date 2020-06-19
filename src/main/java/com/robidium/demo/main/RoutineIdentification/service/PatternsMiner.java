@@ -75,6 +75,7 @@ public class PatternsMiner {
 
             patterns = new ArrayList<>(patterns.stream().filter(pattern -> pattern.getCoverage() >= minCoverage).collect(Collectors.toList()));
 
+	    System.out.println(patterns.size());
             return rankByCoverage(patterns);
         }
     }
@@ -98,22 +99,22 @@ public class PatternsMiner {
 
             switch (metric) {
                 case "frequency": {
-                    ptrns = rankBySupport(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm))).stream().filter(pattern ->
+                    ptrns = rankBySupport(extractPatterns(parseSequences(spmfLocation.resolve("/output.txt"), algorithm))).stream().filter(pattern ->
                             pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
                 case "coverage": {
-                    ptrns = rankByCoverage(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm)), originalCases).stream().filter(pattern ->
+                    ptrns = rankByCoverage(extractPatterns(parseSequences(spmfLocation.resolve("/output.txt"), algorithm)), originalCases).stream().filter(pattern ->
                             pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
                 case "length": {
-                    ptrns = rankByLength(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm))).stream().filter(pattern ->
+                    ptrns = rankByLength(extractPatterns(parseSequences(spmfLocation.resolve("/output.txt"), algorithm))).stream().filter(pattern ->
                             pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
                 case "cohesion": {
-                    ptrns = rankByCohesion(extractPatterns(parseSequences(spmfLocation.resolve("output.txt"), algorithm)), originalCases).
+                    ptrns = rankByCohesion(extractPatterns(parseSequences(Paths.get(spmfLocation + "/output.txt"), algorithm)), originalCases).
                             stream().filter(pattern -> pattern.getAbsoluteSupport() >= minFrequency).collect(Collectors.toList());
                     break;
                 }
@@ -232,13 +233,14 @@ public class PatternsMiner {
         try {
             ProcessBuilder pb = new ProcessBuilder();
             List<String> commands = new ArrayList<>() {{
-                add("java");
+                add("sudo");
+		add("java");
                 add("-jar");
-                add("spmf\\spmf.jar");
+                add("/home/ubuntu/Robidium/spmf/spmf.jar");
                 add("run");
                 add(algorithm.value);
-                add("spmf\\input.txt");
-                add("spmf\\output.txt");
+                add("/home/ubuntu/Robidium/spmf/input.txt");
+                add("/home/ubuntu/Robidium/spmf/output.txt");
                 add(minSupp.toString());
             }};
             pb.command(commands);
