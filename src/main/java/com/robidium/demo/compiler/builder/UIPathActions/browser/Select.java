@@ -1,7 +1,6 @@
 package com.robidium.demo.compiler.builder.UIPathActions.browser;
 
 import com.robidium.demo.compiler.builder.UIPathElement;
-import com.robidium.demo.compiler.entity.Action;
 import org.w3c.dom.Element;
 
 public class Select extends UIPathElement {
