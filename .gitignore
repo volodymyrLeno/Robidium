@@ -1,0 +1,79 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+.idea/
+
+### foofah ###
+foofah/
+
+### compiler input ###
+compiler-input/
+
+### tane ###
+tane-1.0/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+*.csv
+*.xaml
+
+*.iml
+modules.xml
+
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# dependencies
+front-end/node_modules
+front-end/.pnp
+.pnp.js
+
+# testing
+front-end/coverage
+
+# production
+front-end/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+spmf/*.txt
